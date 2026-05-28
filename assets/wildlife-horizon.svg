@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 300" width="100%" height="100%" fill="none" preserveAspectRatio="none">
+  <!-- Soft distant hills -->
+  <path d="M0 240 Q320 220 640 250 T1280 230 Q1360 230 1440 245 L1440 300 L0 300 Z" fill="#161209" opacity="0.4"/>
+  <path d="M0 255 Q400 240 800 265 T1440 250 L1440 300 L0 300 Z" fill="#161209" opacity="0.8"/>
+  <path d="M0 270 Q480 260 960 280 T1440 265 L1440 300 L0 300 Z" fill="#0C0906"/>
+
+  <!-- Left Side: Acacia Tree and Giraffe -->
+  <g fill="#0C0906" transform="translate(150, 100) scale(0.85)">
+    <!-- Tree Trunk -->
+    <path d="M120 200 Q118 150 100 120 Q80 90 70 50 L78 48 Q88 85 108 115 Q126 140 125 200 Z" />
+    <path d="M110 120 Q130 95 160 70 L166 75 Q135 102 115 125 Z" />
+    <!-- Canopies -->
+    <ellipse cx="68" cy="45" rx="45" ry="8" />
+    <ellipse cx="165" cy="65" rx="35" ry="6" />
+    <ellipse cx="115" cy="35" rx="30" ry="6" />
+
+    <!-- Giraffe Silhouette standing near the tree -->
+    <g transform="translate(30, 48) scale(0.65)">
+      <!-- Legs -->
+      <line x1="45" y1="120" x2="40" y2="230" stroke="#0C0906" stroke-width="4" />
+      <line x1="53" y1="120" x2="55" y2="228" stroke="#0C0906" stroke-width="3.5" />
+      <line x1="85" y1="120" x2="80" y2="230" stroke="#0C0906" stroke-width="4" />
+      <line x1="93" y1="120" x2="98" y2="228" stroke="#0C0906" stroke-width="3.5" />
+      <!-- Body -->
+      <path d="M35 120 Q40 95 70 100 Q95 105 100 125 L95 140 Q75 140 45 135 Z" />
+      <!-- Neck -->
+      <path d="M40 105 Q35 70 20 20 Q15 0 20 -2 Q28 0 28 15 Q40 60 52 98 Z" />
+      <!-- Head and ears -->
+      <path d="M20 -2 Q18 -10 10 -15 L8 -12 Q12 -6 18 -2 Q20 2 24 5 Z" />
+      <path d="M20 -2 Q28 -6 32 -4 Q32 2 24 3 Z" />
+      <!-- Tail -->
+      <path d="M98 125 Q108 140 105 175" stroke="#0C0906" stroke-width="2.5" />
+    </g>
+  </g>
+
+  <!-- Right Side: Migrating Elephants -->
+  <!-- Elephant 1 (Adult) -->
+  <g fill="#0C0906" transform="translate(850, 155) scale(0.6)">
+    <!-- Body & Head -->
+    <path d="M40 100 Q50 40 110 35 Q170 30 200 65 Q235 60 250 80 Q265 95 255 125 Q245 135 240 130 Q248 110 238 95 Q225 80 205 90 Q200 120 190 150 L170 150 Q180 120 185 95 Q135 100 95 90 L85 155 L65 155 Q75 110 70 95 Q55 105 45 155 L25 155 Q35 110 40 100 Z" />
+    <!-- Ears -->
+    <path d="M125 55 Q95 55 90 90 Q92 120 115 115 Q140 110 135 75 Z" />
+    <!-- Trunk -->
+    <path d="M255 125 Q265 145 280 150 Q288 152 285 160 Q275 160 262 145 Q248 130 245 120 Z" />
+    <!-- Tusks -->
+    <path d="M242 125 Q255 132 265 130 Q255 120 240 118 Z" fill="#F0E8D8" />
+    <!-- Tail -->
+    <path d="M42 98 Q30 115 32 145" stroke="#0C0906" stroke-width="3" />
+  </g>
+
+  <!-- Elephant 2 (Calf trailing behind) -->
+  <g fill="#0C0906" transform="translate(740, 190) scale(0.35)">
+    <!-- Body & Head -->
+    <path d="M40 100 Q50 40 110 35 Q170 30 200 65 Q235 60 250 80 Q265 95 255 125 Q245 135 240 130 Q248 110 238 95 Q225 80 205 90 Q200 120 190 150 L170 150 Q180 120 185 95 Q135 100 95 90 L85 155 L65 155 Q75 110 70 95 Q55 105 45 155 L25 155 Q35 110 40 100 Z" />
+    <!-- Ears -->
+    <path d="M125 55 Q95 55 90 90 Q92 120 115 115 Q140 110 135 75 Z" />
+    <!-- Trunk -->
+    <path d="M255 125 Q265 145 280 150 Q288 152 285 160 Q275 160 262 145 Q248 130 245 120 Z" />
+    <!-- Tail -->
+    <path d="M42 98 Q30 115 32 145" stroke="#0C0906" stroke-width="3" />
+  </g>
+</svg>

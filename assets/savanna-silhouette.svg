@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250" width="100%" height="100%" fill="none" preserveAspectRatio="none">
+  <!-- Ground Terrain -->
+  <path d="M0 210 Q360 230 720 220 T1440 200 L1440 250 L0 250 Z" fill="#161209" opacity="0.6"/>
+  <path d="M0 220 Q480 200 960 230 T1440 215 L1440 250 L0 250 Z" fill="#0C0906"/>
+  
+  <!-- Silhouette of Acacia Trees (Geometric/Organic Paths) -->
+  <!-- Left Small Acacia -->
+  <g fill="#0C0906" transform="translate(180, 110) scale(0.6)">
+    <!-- Trunk -->
+    <path d="M50 150 Q45 100 30 80 Q25 70 25 50 Q25 40 40 30 Q60 25 70 10 L75 10 Q65 30 55 45 Q50 65 52 80 Q56 100 55 150 Z" />
+    <!-- Branch 1 Left -->
+    <path d="M32 82 Q10 70 -5 50 Q-15 40 -10 32 Q5 45 28 65 Z" />
+    <!-- Branch 2 Right -->
+    <path d="M52 75 Q75 60 90 40 Q98 32 95 25 Q82 35 48 60 Z" />
+    <!-- Foliage flat-top clouds -->
+    <ellipse cx="65" cy="5" rx="35" ry="6" />
+    <ellipse cx="-2" cy="35" rx="25" ry="5" />
+    <ellipse cx="98" cy="22" rx="30" ry="6" />
+  </g>
+
+  <!-- Central Main Large Acacia -->
+  <g fill="#0C0906" transform="translate(720, 40) scale(1.1)">
+    <!-- Trunk -->
+    <path d="M80 170 Q75 120 60 90 Q40 60 30 30 L38 30 Q50 62 70 85 Q82 105 84 170 Z" />
+    <path d="M80 170 Q85 130 92 100 Q105 70 120 40 L128 42 Q112 75 96 105 Q88 128 85 170 Z" />
+    <!-- Secondary Trunk details -->
+    <path d="M72 170 Q75 135 78 100 Q80 80 72 65 L80 62 Q88 80 84 100 Q80 135 76 170 Z" />
+    <!-- Left Major Branch -->
+    <path d="M56 82 Q20 65 -10 50 Q-30 40 -20 30 Q-5 42 35 60 Z" />
+    <!-- Right Major Branch -->
+    <path d="M102 85 Q140 70 180 50 Q205 38 198 28 Q182 40 125 65 Z" />
+    <!-- Small Center Branch -->
+    <path d="M75 65 Q75 45 68 25 L75 22 Q85 45 80 65 Z" />
+    <!-- Savannah Flat Foliage (signature Acacia flat canopies) -->
+    <ellipse cx="32" cy="25" rx="45" ry="7" />
+    <ellipse cx="120" cy="35" rx="55" ry="8" />
+    <ellipse cx="-15" cy="45" rx="30" ry="6" />
+    <ellipse cx="190" cy="22" rx="40" ry="7" />
+    <ellipse cx="70" cy="18" rx="25" ry="5" />
+  </g>
+
+  <!-- Right Acacia and Shrubbery -->
+  <g fill="#0C0906" transform="translate(1150, 90) scale(0.85)">
+    <path d="M60 150 Q55 105 45 85 Q30 65 35 45 L42 45 Q38 65 52 82 Q62 100 62 150 Z" />
+    <path d="M52 85 Q75 70 95 45 L102 48 Q80 75 58 90 Z" />
+    <ellipse cx="35" cy="40" rx="38" ry="7" />
+    <ellipse cx="98" cy="42" rx="32" ry="6" />
+  </g>
+</svg>
