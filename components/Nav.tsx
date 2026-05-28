@@ -207,7 +207,7 @@ export const Nav = () => {
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-cream-muted">
                 <a 
-                  href="https://instagram.com/axelo_safari" 
+                  href="https://www.instagram.com/axelo_safari_suite?igsh=ZnljamQ3OXI0YnJ5" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="hover:text-gold transition-colors duration-300 flex items-center space-x-1.5 text-xs font-mono"

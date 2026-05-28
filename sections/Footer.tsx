@@ -82,7 +82,7 @@ export const Footer = () => {
           {/* Social Icons Group */}
           <div className="flex items-center space-x-3 pt-2">
             <a 
-              href="https://instagram.com/axelo_safari" 
+              href="https://www.instagram.com/axelo_safari_suite?igsh=ZnljamQ3OXI0YnJ5" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="w-9 h-9 rounded-lg border border-border-warm bg-bg-surface/30 flex items-center justify-center text-cream-muted hover:text-gold hover:border-gold/40 hover:bg-bg-surface transition-all duration-300"
