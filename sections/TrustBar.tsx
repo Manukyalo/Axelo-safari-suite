@@ -4,7 +4,7 @@ import React from 'react';
 
 export const TrustBar = () => {
   const items = [
-    'Serengeti',
+    'Eastern Vacations Tours and Safari',
     'Masai Mara',
     'Amboseli',
     'Tsavo',
@@ -12,8 +12,6 @@ export const TrustBar = () => {
     'Nairobi NP',
     'Samburu',
     'Lake Nakuru',
-    'Bwindi',
-    'Okavango',
   ];
 
   return (
