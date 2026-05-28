@@ -48,7 +48,7 @@ export const ScreenshotGallery = () => {
       badge: 'VEHICLE DIAGNOSTICS & TRACKING',
       title: 'Fleet Watchdog Telemetry Grid',
       description: 'Real-time telemetry overlay tracking vehicle mechanical stress, speeds, geofence compliance, and passenger occupancy indices across all active safaris.',
-      imagePath: '/Gallery/Screenshot 2026-05-28 121029.png',
+      imagePath: '/Gallery/live tracking.png',
       details: [
         'Live engine RPM, oil pressure, and cooling diagnostics loop',
         'Automatic speed limiter breach alerts synced with local rangers',
@@ -56,16 +56,16 @@ export const ScreenshotGallery = () => {
       ]
     },
     {
-      id: 'ops-dispatch',
-      name: 'Ops Dispatch',
-      badge: 'SATELLITE EMERGENCY COMMS',
-      title: 'Operations Tactical Dispatch Desk',
-      description: 'The military-grade emergency outpost coordinator linking deep-bush ranger vehicles, charter flight paths, and physical regional bases via redundant satellite grids.',
-      imagePath: '/Gallery/Screenshot 2026-05-28 121039.png',
+      id: 'fleet-personnel',
+      name: 'Fleet Personnel',
+      badge: 'TACTICAL DISPATCH & STAFF',
+      title: 'Operations Fleet Personnel Dispatch',
+      description: 'Real-time coordination panel managing deep-bush rangers, physical regional outposts, and on-site support personnel with redundant communication links.',
+      imagePath: '/Gallery/Fleet personel.png',
       details: [
-        'Satellite mesh network telemetry with automatic failover channels',
-        'Ranger outpost dispatch queuing with priority response actions',
-        'Geolocated emergency signal triangulation and search-rescue grids'
+        'Real-time tracking of field personnel location and deployment status',
+        'Seamless dispatch coordination for rangers and local outposts',
+        'Encrypted satellite-linked ranger communication grids'
       ]
     },
     {
@@ -79,19 +79,6 @@ export const ScreenshotGallery = () => {
         'Season-aware high-occupancy room grid locking with validation',
         'Integrated charter flight logs detailing arrival times and pilots',
         'Bespoke agent commission payout ledgers with secure API sync'
-      ]
-    },
-    {
-      id: 'flight-control',
-      name: 'Flight Control',
-      badge: 'AERIAL CHARTER ROUTING',
-      title: 'Serengeti Flight Control Desk',
-      description: 'Coordination panel mapping private charter flight paths, aircraft weight balances, runway wind vectors, and dynamic guest boarding schedules.',
-      imagePath: '/Gallery/Screenshot 2026-05-28 121100.png',
-      details: [
-        'Live airspace transponder tracking over remote national parks',
-        'Automated weight-balance calculation sheets for bush planes',
-        'Dynamic runway safety indicators tracking localized wind shear'
       ]
     },
     {
@@ -119,47 +106,9 @@ export const ScreenshotGallery = () => {
         'Anti-poaching patrol logs synced with regional conservation headquarters',
         'Guest game drive checklists and custom feedback ratings'
       ]
-    },
-    {
-      id: 'vessel-diagnostics',
-      name: 'Diagnostics',
-      badge: 'CRUISER HEALTH METADATA',
-      title: 'Vessel Stress & Sensor Diagnostics',
-      description: 'Mechanical diagnostic readouts monitoring tire pressure, shock absorber fatigue, radiator temps, and fuel qualities for deep-savannah cruiser excursions.',
-      imagePath: '/Gallery/Screenshot 2026-05-28 121124.png',
-      details: [
-        'Vibrational analysis metrics alerting to axle stress early',
-        'Tire heat monitoring logs mapping terrain stress coefficients',
-        'Radiator coolant heat cycles indicators preventing out-bush breakdowns'
-      ]
-    },
-    {
-      id: 'exec-analytics',
-      name: 'Exec Analytics',
-      badge: 'BUSINESS CONCESSION SAAS',
-      title: 'Executive Financial Analytics Grid',
-      description: 'High-level financial summaries showing average daily rates (ADR), revenue per available room (RevPAR), guide costs, and fleet maintenance overhead charts.',
-      imagePath: '/Gallery/Screenshot 2026-05-28 121132.png',
-      details: [
-        'Multi-currency dynamic pricing charts tracking seasonal demand',
-        'Consolidated concession fees calculations mapped against occupancy',
-        'Live operating cost projection dashboards with target targets'
-      ]
-    },
-    {
-      id: 'security-ledger',
-      name: 'Security Ledger',
-      badge: 'MILITARY AUDIT REGISTRY',
-      title: 'Security Cryptographic Audit Ledger',
-      description: 'Un-alterable write-once, read-many audit trail logging server entries, API executions, ranger dispatch overrides, and concession ledger access.',
-      imagePath: '/Gallery/Screenshot 2026-05-28 121157.png',
-      details: [
-        'SHA-256 block chain linkage validating operational compliance',
-        'Ranger override tracking logging dispatch authorization tokens',
-        'Strict HIPAA-compliant guest health file access audit log'
-      ]
     }
   ];
+
 
   // Sync index on active tab change
   const currentPresetIndex = presets.findIndex(p => p.id === activeTab);
@@ -331,14 +280,14 @@ export const ScreenshotGallery = () => {
                 {/* Sandbox selector */}
                 <button
                   onClick={() => setActiveTab('custom')}
-                  className={`px-2 py-3 rounded-[6px] text-[10px] font-mono tracking-wider uppercase transition-all duration-300 col-span-3 flex items-center justify-center space-x-1.5 ${
+                  className={`px-2 py-3 rounded-[6px] text-[10px] font-mono tracking-wider uppercase transition-all duration-300 flex flex-col items-center justify-center text-center space-y-1 ${
                     activeTab === 'custom'
                       ? 'bg-gold text-cream shadow-lg shadow-gold/10'
                       : 'text-cream-muted hover:text-cream border border-dashed border-border-warm hover:border-gold/30 hover:bg-bg-lift/40'
                   }`}
                 >
-                  <UploadCloud className="w-3.5 h-3.5" />
-                  <span>Sandbox Live Upload</span>
+                  <UploadCloud className="w-3.5 h-3.5 shrink-0" />
+                  <span>Sandbox Live</span>
                 </button>
               </div>
             </div>
