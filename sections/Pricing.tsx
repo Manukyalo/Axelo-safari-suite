@@ -48,9 +48,10 @@ export const Pricing = () => {
     {
       name: 'Starter',
       price: 450000,
-      description: 'Ideal for boutique camps managing initial operations.',
+      monthlyFee: 50000,
+      description: 'Ideal for boutique tour operators managing initial operations.',
       features: [
-        'Up to 3 Luxury Lodges',
+        'Up to 3 Safari Vehicles',
         'Standard Telemetry Watchdog',
         'Fleet GPS Dashboard',
         'Basic Booking Engine Integration',
@@ -61,9 +62,10 @@ export const Pricing = () => {
     {
       name: 'Professional',
       price: 850000,
+      monthlyFee: 80000,
       description: 'Built for enterprise operators spanning multiple sectors.',
       features: [
-        'Up to 10 Luxury Lodges',
+        'Up to 10 Safari Vehicles',
         'Satellite SOS Mesh Integration',
         'Real-time Micro-Climate Radar',
         'Connected Fleet Workspace',
@@ -74,15 +76,17 @@ export const Pricing = () => {
     },
     {
       name: 'Enterprise',
-      price: 1850000,
+      price: 1300000,
+      monthlyFee: 120000,
       description: 'Complete zero-trust unalterable operations security.',
       features: [
-        'Unlimited Luxury Lodges & Camps',
+        'Unlimited Vehicles & Field Staff',
         'Dedicated Private Satellite Channels',
         'L6 Cryptographic Audit Logs',
-        'Instant Multi-Party VIP manifests',
+        'Instant Multi-Party VIP Manifests',
         'Custom Flight Charter API Sync',
         '24/7 Dedicated Ranger Hotlines',
+        'Guest Mobile App (White-Label)',
       ],
       isPopular: false,
     },
@@ -213,26 +217,47 @@ export const Pricing = () => {
                   {tier.description}
                 </p>
 
-                {/* Price Display */}
-                <div className="flex items-baseline space-x-1.5 border-b border-border-warm pb-6 mb-6">
-                  <span className="text-xs font-mono font-medium text-gold tracking-widest">KES</span>
-                  <span className="text-3xl md:text-4xl font-serif font-bold text-cream tabular-nums">
-                    <PriceCounter value={tier.price} />
-                  </span>
-                  <span className="text-xs font-sans text-cream-muted font-light">/mo</span>
+                {/* Price Display — Setup + Monthly Fee */}
+                <div className="border-b border-border-warm pb-6 mb-6 space-y-3">
+                  {/* One-time setup / license fee */}
+                  <div className="flex items-baseline space-x-1.5">
+                    <span className="text-xs font-mono font-medium text-gold tracking-widest">KES</span>
+                    <span className="text-3xl md:text-4xl font-serif font-bold text-cream tabular-nums">
+                      <PriceCounter value={tier.price} />
+                    </span>
+                    <span className="text-xs font-sans text-cream-muted font-light">setup</span>
+                  </div>
+                  {/* Monthly recurring fee */}
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[9px] font-mono text-cream-ghost uppercase tracking-widest">Monthly:</span>
+                    <span className="text-sm font-mono font-semibold text-gold">
+                      KES {tier.monthlyFee.toLocaleString()}
+                    </span>
+                    <span className="text-[10px] font-sans text-cream-ghost">/mo</span>
+                  </div>
                 </div>
 
                 {/* Checklist Features */}
                 <ul className="space-y-3.5 mb-8">
-                  {tier.features.map((feat, fidx) => (
-                    <li
-                      key={fidx}
-                      className="checklist-item flex items-start space-x-3 text-xs text-cream/90 font-light opacity-0"
-                    >
-                      <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                      <span className="font-sans leading-tight">{feat}</span>
-                    </li>
-                  ))}
+                  {tier.features.map((feat, fidx) => {
+                    const isGuestApp = feat.includes('Guest Mobile App');
+                    return (
+                      <li
+                        key={fidx}
+                        className="checklist-item flex items-start space-x-3 text-xs text-cream/90 font-light opacity-0"
+                      >
+                        <Check className={`w-4 h-4 shrink-0 mt-0.5 ${isGuestApp ? 'text-gold' : 'text-gold'}`} />
+                        {isGuestApp ? (
+                          <span className="font-sans leading-tight flex items-center gap-2">
+                            {feat}
+                            <span className="text-[8px] font-mono font-bold tracking-widest uppercase bg-gold/15 text-gold border border-gold/30 px-1.5 py-0.5 rounded">NEW</span>
+                          </span>
+                        ) : (
+                          <span className="font-sans leading-tight">{feat}</span>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
