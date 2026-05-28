@@ -129,3 +129,17 @@ html.lenis, html.lenis body {
   background-color: var(--color-gold);
   color: var(--color-bg-base);
 }
+
+/* System Showcase Scanning Laser Keyframes */
+@keyframes scan-line {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+

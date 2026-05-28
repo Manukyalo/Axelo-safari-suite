@@ -7,6 +7,7 @@ const Hero = dynamic(() => import('@/sections/Hero'), { ssr: false });
 const TrustBar = dynamic(() => import('@/sections/TrustBar'), { ssr: false });
 const Features = dynamic(() => import('@/sections/Features'), { ssr: false });
 const FeatureSpotlight = dynamic(() => import('@/sections/FeatureSpotlight'), { ssr: false });
+const ScreenshotGallery = dynamic(() => import('@/sections/ScreenshotGallery'), { ssr: false });
 const Pricing = dynamic(() => import('@/sections/Pricing'), { ssr: false });
 const CTA = dynamic(() => import('@/sections/CTA'), { ssr: false });
 const Footer = dynamic(() => import('@/sections/Footer'), { ssr: false });
@@ -22,6 +23,10 @@ export default function Home() {
       <TrustBar />
       <Features />
       <FeatureSpotlight />
+      
+      {/* Interactive Screenshot sandbox explorer */}
+      <ScreenshotGallery />
+
       <Pricing />
       <CTA />
       

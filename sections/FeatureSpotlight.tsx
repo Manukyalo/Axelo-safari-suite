@@ -112,12 +112,16 @@ export const FeatureSpotlight = () => {
     const outer = outerWrapperRef.current;
     if (!outer) return;
 
+    let triggerInstance: any = null;
+
     // Pin feature track and update index on progress
     import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-      ScrollTrigger.create({
+      triggerInstance = ScrollTrigger.create({
         trigger: outer,
         start: 'top top',
-        end: 'bottom bottom',
+        end: '+=500%', // Pin for 5 full viewport heights of scrolling
+        pin: true,
+        pinSpacing: true,
         scrub: 0.5,
         onUpdate: (self) => {
           const index = Math.floor(self.progress * 6);
@@ -128,8 +132,9 @@ export const FeatureSpotlight = () => {
 
     // Subtle floating animation on the right panel mockup container
     const floater = floatContainerRef.current;
+    let floatTween: any = null;
     if (floater) {
-      gsap.to(floater, {
+      floatTween = gsap.to(floater, {
         y: -10,
         duration: 2.5,
         repeat: -1,
@@ -137,6 +142,11 @@ export const FeatureSpotlight = () => {
         ease: 'sine.inOut',
       });
     }
+
+    return () => {
+      if (triggerInstance) triggerInstance.kill();
+      if (floatTween) floatTween.kill();
+    };
   }, []);
 
   // Manage mockup cards clip-path wipes when activeIndex changes
@@ -177,39 +187,39 @@ export const FeatureSpotlight = () => {
     <section
       ref={outerWrapperRef}
       id="spotlight"
-      className="relative w-full h-[600vh] bg-bg-base z-20"
+      className="w-full h-screen relative bg-bg-base z-20 overflow-hidden"
     >
-      {/* Sticky Inner Panel */}
-      <div className="sticky top-0 left-0 w-full h-screen flex flex-col md:flex-row overflow-hidden">
+      {/* Pinned Inner Panel */}
+      <div className="spotlight-inner w-full h-full flex flex-col md:flex-row relative">
         
         {/* LEFT PANEL — Text Details */}
         <div
           ref={leftPanelRef}
-          className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-8 md:px-20 py-12 relative border-b md:border-b-0 md:border-r border-border-warm bg-bg-base"
+          className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 md:px-16 py-6 md:py-12 relative border-b md:border-b-0 md:border-r border-border-warm bg-bg-base"
         >
           {/* Giant Faded Serif Background Number */}
-          <div className="absolute top-1/2 left-12 md:left-20 -translate-y-1/2 text-[140px] md:text-[220px] font-serif font-semibold text-gold opacity-[0.04] leading-none pointer-events-none select-none select-none transition-all duration-500">
+          <div className="absolute top-1/2 left-12 md:left-20 -translate-y-1/2 text-[100px] md:text-[180px] font-serif font-semibold text-gold opacity-[0.04] leading-none pointer-events-none select-none transition-all duration-500">
             {activeFeature.num}
           </div>
 
           <div className="relative z-10 max-w-lg">
             {/* Upper Indicator */}
-            <span className="text-[10px] tracking-[0.25em] font-mono font-medium text-gold uppercase block mb-4">
+            <span className="text-[10px] tracking-[0.25em] font-mono font-medium text-gold uppercase block mb-3">
               Module Showcase
             </span>
 
             {/* Feature Name with Text Scramble on transition */}
-            <h2 className="text-3xl md:text-4xl font-serif font-semibold text-cream leading-tight mb-4 min-h-[48px]">
+            <h2 className="text-2xl md:text-4xl font-serif font-semibold text-cream leading-tight mb-3 min-h-[40px] md:min-h-[48px]">
               <TextScramble key={`title-${activeIndex}`} text={activeFeature.name} />
             </h2>
 
             {/* Description */}
-            <p className="text-sm text-cream-muted font-light font-sans leading-relaxed mb-6 min-h-[80px]">
+            <p className="text-xs md:text-sm text-cream-muted font-light font-sans leading-relaxed mb-5 min-h-[64px] md:min-h-[80px]">
               {activeFeature.description}
             </p>
 
             {/* Bullets checklist */}
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-2 md:space-y-3 mb-6 md:mb-8">
               {activeFeature.bullets.map((bullet, idx) => (
                 <li key={idx} className="flex items-start space-x-3 text-xs text-cream/90 font-light font-sans">
                   <span 
@@ -233,12 +243,12 @@ export const FeatureSpotlight = () => {
         {/* RIGHT PANEL — Dashboard Mockups */}
         <div
           ref={rightPanelRef}
-          className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-bg-surface p-8 md:p-16 relative"
+          className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-bg-surface p-6 md:p-12 relative"
         >
           {/* Floating Container to contain our 6 dashboard SVGs */}
           <div
             ref={floatContainerRef}
-            className="relative w-full max-w-lg aspect-square md:aspect-[4/3] rounded-xl border border-border-warm bg-bg-base/80 shadow-2xl p-6 overflow-hidden"
+            className="relative w-full max-w-lg max-h-[60vh] aspect-square md:aspect-[4/3] rounded-xl border border-border-warm bg-bg-base/80 shadow-2xl p-6 overflow-hidden"
           >
             {/* Mockup 1: SOS Network */}
             <div 
