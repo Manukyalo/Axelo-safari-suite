@@ -54,12 +54,12 @@ export const Footer = () => {
       ref={footerRef}
       className="bg-bg-base border-t border-gold/15 py-16 md:py-24 px-6 md:px-12 relative z-20 opacity-0 will-change-transform"
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 mb-16">
         
         {/* Column 1: Brand Logo, Tagline & Socials */}
         <div className="flex flex-col space-y-5">
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="#" className="flex items-center space-x-2.5 group">
+          <a href="/" className="flex items-center space-x-2.5 group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src="/Logo/Axelo Logo.jpeg" 
@@ -110,7 +110,7 @@ export const Footer = () => {
         </div>
 
         {/* Column 2: System Links */}
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 md:pl-12">
           <h4 className="text-xs font-mono font-bold tracking-[0.2em] text-gold uppercase">
             OPERATING MODULES
           </h4>
@@ -138,34 +138,15 @@ export const Footer = () => {
           </ul>
         </div>
 
-        {/* Column 3: Contact & Headquarters */}
-        <div className="flex flex-col space-y-4 text-xs font-sans text-cream-muted font-light leading-relaxed">
-          <h4 className="text-xs font-mono font-bold tracking-[0.2em] text-gold uppercase mb-1">
-            DISPATCH HQ
-          </h4>
-          <p>
-            Axelo Technologies Ltd<br />
-            Level 6, Axelo Heights<br />
-            General Mathenge Rd, Westlands<br />
-            Nairobi, Kenya
-          </p>
-          <div className="pt-2">
-            <span className="text-cream font-mono">Operations: </span>
-            <a href="mailto:concierge@axelosafari.com" className="link-underline font-mono">
-              concierge@axelosafari.com
-            </a>
-          </div>
-        </div>
-
       </div>
 
       {/* Footer Bottom copyright and trademark info */}
       <div className="max-w-6xl mx-auto pt-8 border-t border-border-warm flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono text-cream-ghost">
         <span>© 2025 Axelo Technologies Ltd · Nairobi, Kenya</span>
         <div className="flex items-center space-x-6">
-          <a href="#" className="hover:text-cream transition-colors duration-300">Privacy Policy</a>
+          <a href="/privacy-policy" className="hover:text-cream transition-colors duration-300">Privacy Policy</a>
           <span>·</span>
-          <a href="#" className="hover:text-cream transition-colors duration-300">Concession Terms</a>
+          <a href="/concession-terms" className="hover:text-cream transition-colors duration-300">Concession Terms</a>
         </div>
       </div>
     </footer>

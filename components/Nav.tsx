@@ -79,7 +79,7 @@ export const Nav = () => {
         className="fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-5 flex items-center justify-between transition-shadow duration-300"
       >
         {/* Logo */}
-        <a href="#" className="flex items-center space-x-2.5 group z-[60]">
+        <a href="/" className="flex items-center space-x-2.5 group z-[60]">
           <img 
             src="/Logo/Axelo Logo.jpeg" 
             alt="Axelo Safari Suite Logo" 

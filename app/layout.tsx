@@ -28,6 +28,11 @@ export const metadata: Metadata = {
   description:
     'Experience the cinematic, premium operations SaaS designed exclusively for luxury East African safari operators. Live fleet tracking, SOS networks, real-time weather intelligence, and L6 military-grade security audit logs.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://axelosafari.com'),
+  icons: {
+    icon: '/Logo/Axelo Logo.jpeg',
+    shortcut: '/Logo/Axelo Logo.jpeg',
+    apple: '/Logo/Axelo Logo.jpeg',
+  },
   alternates: {
     canonical: '/',
   },
@@ -39,6 +44,14 @@ export const metadata: Metadata = {
     siteName: 'Axelo Safari Suite',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/Logo/Axelo Logo.jpeg',
+        width: 800,
+        height: 800,
+        alt: 'Axelo Safari Suite',
+      },
+    ],
   },
 };
 
