@@ -8,44 +8,10 @@ import { MagneticButton } from '../components/MagneticButton';
 import { useBooking } from '../lib/context/BookingContext';
 
 
-const StatCounter: React.FC<{ value: number; decimals?: number }> = ({ value, decimals = 0 }) => {
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const countVal = { val: 0 };
-
-    import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 85%',
-        once: true,
-        onEnter: () => {
-          gsap.to(countVal, {
-            val: value,
-            duration: 1.4,
-            ease: 'power2.out',
-            onUpdate: () => {
-              if (el) {
-                el.innerText = countVal.val.toFixed(decimals);
-              }
-            },
-          });
-        },
-      });
-    });
-  }, [value, decimals]);
-
-  return <span ref={ref}>0</span>;
-};
-
 export const Hero = () => {
   const [isStarted, setIsStarted] = useState(false);
   const { openBooking } = useBooking();
   const bgSilhouetteRef = useRef<HTMLDivElement>(null);
-  const statsContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Parallax Scroll for wildlife silhouette SVG at the bottom
@@ -72,30 +38,6 @@ export const Hero = () => {
 
     window.addEventListener('preloader:done', handlePreloaderDone);
 
-    // Stagger stats bar children entry on view
-    const statsContainer = statsContainerRef.current;
-    if (statsContainer) {
-      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-        ScrollTrigger.create({
-          trigger: statsContainer,
-          start: 'top 85%',
-          once: true,
-          onEnter: () => {
-            gsap.fromTo(
-              statsContainer.querySelectorAll('.stat-item'),
-              { y: 30, opacity: 0 },
-              {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                ease: 'power2.out',
-                stagger: 0.12,
-              }
-            );
-          },
-        });
-      });
-    }
 
     return () => {
       window.removeEventListener('preloader:done', handlePreloaderDone);
@@ -187,41 +129,7 @@ export const Hero = () => {
         )}
       </div>
 
-      {/* E) STATS BAR */}
-      <div
-        ref={statsContainerRef}
-        className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-border-warm relative z-20"
-      >
-        {/* Stat Item 1 */}
-        <div className="stat-item flex flex-col items-center md:items-start text-center md:text-left opacity-0 translate-y-[30px]">
-          <h3 className="text-3xl md:text-4xl font-serif text-gold leading-none font-medium">
-            <StatCounter value={140} />+
-          </h3>
-          <p className="mt-2 text-xs uppercase tracking-widest text-cream-muted font-mono">
-            Luxury Lodges Native
-          </p>
-        </div>
 
-        {/* Stat Item 2 */}
-        <div className="stat-item flex flex-col items-center md:items-start text-center md:text-left opacity-0 translate-y-[30px]">
-          <h3 className="text-3xl md:text-4xl font-serif text-gold leading-none font-medium">
-            <StatCounter value={99.9} decimals={1} />%
-          </h3>
-          <p className="mt-2 text-xs uppercase tracking-widest text-cream-muted font-mono">
-            SOS Network Uptime
-          </p>
-        </div>
-
-        {/* Stat Item 3 */}
-        <div className="stat-item flex flex-col items-center md:items-start text-center md:text-left opacity-0 translate-y-[30px]">
-          <h3 className="text-3xl md:text-4xl font-serif text-gold leading-none font-medium">
-            KES <StatCounter value={12} />M+
-          </h3>
-          <p className="mt-2 text-xs uppercase tracking-widest text-cream-muted font-mono">
-            Operational Audits Saved
-          </p>
-        </div>
-      </div>
     </section>
   );
 };

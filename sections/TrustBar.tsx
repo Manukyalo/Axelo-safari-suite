@@ -8,7 +8,6 @@ export const TrustBar = () => {
     'Masai Mara',
     'Amboseli',
     'Tsavo',
-    'Ngorongoro',
     'Nairobi NP',
     'Samburu',
     'Lake Nakuru',
