@@ -4,6 +4,8 @@ import React, { useRef, useEffect } from 'react';
 import gsap from '../lib/gsap';
 import { Check } from 'lucide-react';
 import { MagneticButton } from '../components/MagneticButton';
+import { useBooking } from '../lib/context/BookingContext';
+
 
 const PriceCounter: React.FC<{ value: number }> = ({ value }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -40,6 +42,7 @@ const PriceCounter: React.FC<{ value: number }> = ({ value }) => {
 
 export const Pricing = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { openBooking } = useBooking();
 
   const tiers = [
     {
@@ -236,6 +239,7 @@ export const Pricing = () => {
               {/* Call to action */}
               <div className="w-full mt-auto">
                 <MagneticButton
+                  onClick={openBooking}
                   className={`w-full py-4 rounded-[8px] font-mono text-xs tracking-wider uppercase border transition-colors duration-300 select-none ${
                     tier.isPopular
                       ? 'shimmer-btn bg-gold border-gold text-cream hover:bg-gold-light shadow-lg shadow-gold/10'

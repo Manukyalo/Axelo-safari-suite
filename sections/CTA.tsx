@@ -4,12 +4,14 @@ import React, { useRef, useEffect } from 'react';
 import gsap from '../lib/gsap';
 import { SplitHeading } from '../components/SplitHeading';
 import { MagneticButton } from '../components/MagneticButton';
+import { useBooking } from '../lib/context/BookingContext';
 
 export const CTA = () => {
   const ctaSectionRef = useRef<HTMLDivElement>(null);
   const silhouetteRef = useRef<HTMLDivElement>(null);
   const hrRef = useRef<HTMLHRElement>(null);
   const primaryBtnRef = useRef<HTMLDivElement>(null);
+  const { openBooking } = useBooking();
 
   useEffect(() => {
     // 1. Savannah Parallax background (Speed 0.4: y: "-20%")
@@ -154,12 +156,18 @@ export const CTA = () => {
         <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           {/* Primary breathing button wrapper */}
           <div ref={primaryBtnRef}>
-            <MagneticButton className="shimmer-btn bg-gold hover:bg-gold-light text-cream font-mono text-xs tracking-wider uppercase px-8 py-4 rounded-[8px] border border-gold shadow-lg shadow-gold/10 transition-colors duration-300">
+            <MagneticButton 
+              onClick={openBooking}
+              className="shimmer-btn bg-gold hover:bg-gold-light text-cream font-mono text-xs tracking-wider uppercase px-8 py-4 rounded-[8px] border border-gold shadow-lg shadow-gold/10 transition-colors duration-300"
+            >
               Launch Suite License
             </MagneticButton>
           </div>
 
-          <MagneticButton className="bg-transparent hover:bg-cream/5 text-cream font-mono text-xs tracking-wider uppercase px-8 py-4 rounded-[8px] border border-border-warm transition-all duration-300">
+          <MagneticButton 
+            onClick={openBooking}
+            className="bg-transparent hover:bg-cream/5 text-cream font-mono text-xs tracking-wider uppercase px-8 py-4 rounded-[8px] border border-border-warm transition-all duration-300"
+          >
             Consult Systems Architect
           </MagneticButton>
         </div>

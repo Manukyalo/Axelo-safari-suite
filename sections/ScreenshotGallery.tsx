@@ -1,76 +1,204 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   UploadCloud, 
   FileImage, 
   Terminal, 
-  Cpu, 
-  Radio, 
-  ShieldCheck,
   CheckCircle2,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  Maximize2,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  ShieldCheck,
+  Zap
 } from 'lucide-react';
 
-interface MockupPreset {
+interface ScreenshotPreset {
   id: string;
   name: string;
   badge: string;
   title: string;
   description: string;
+  imagePath: string;
   details: string[];
 }
 
 export const ScreenshotGallery = () => {
-  const [activeTab, setActiveTab] = useState<string>('sos');
+  const [activeTab, setActiveTab] = useState<string>('fleet-telemetry');
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isSimulatingLoad, setIsSimulatingLoad] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   
+  // Lightbox State
+  const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const presets: MockupPreset[] = [
+  const presets: ScreenshotPreset[] = [
     {
-      id: 'sos',
-      name: 'SOS Dispatch Command',
-      badge: 'REAL-TIME OUTPOSTS MESH',
-      title: 'Satellite SOS Dispatch Console',
-      description: 'The administrative command station linking ranger vehicles, remote flight charters, and regional bases with an un-jammable satellite mesh.',
+      id: 'fleet-telemetry',
+      name: 'Fleet Telemetry',
+      badge: 'VEHICLE DIAGNOSTICS & TRACKING',
+      title: 'Fleet Watchdog Telemetry Grid',
+      description: 'Real-time telemetry overlay tracking vehicle mechanical stress, speeds, geofence compliance, and passenger occupancy indices across all active safaris.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121029.png',
       details: [
-        'Active satellite telemetry loops with zero-latency synchronization',
-        'Outpost coordination maps displaying localized ranger squads',
-        'One-click priority audio channel triggers for instant dispatching'
+        'Live engine RPM, oil pressure, and cooling diagnostics loop',
+        'Automatic speed limiter breach alerts synced with local rangers',
+        'Passenger manifest checkins linked with digital guest visa profiles'
       ]
     },
     {
-      id: 'watchdog',
-      name: 'Operations Watchdog',
-      badge: 'VEHICLE MECHANICS & TELEMETRY',
-      title: 'Camp Operations Supervisor',
-      description: 'A centralized operational health dashboard offering complete oversight of cruiser mechanical performance, geofence compliance, and guide checklists.',
+      id: 'ops-dispatch',
+      name: 'Ops Dispatch',
+      badge: 'SATELLITE EMERGENCY COMMS',
+      title: 'Operations Tactical Dispatch Desk',
+      description: 'The military-grade emergency outpost coordinator linking deep-bush ranger vehicles, charter flight paths, and physical regional bases via redundant satellite grids.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121039.png',
       details: [
-        'Radiator stress and tire diagnostics indicators with instant alarms',
-        'Dynamic speed limits compliance trackers mapped against local terrain',
-        'Automated guide wildlife logs compiled in interactive migration logs'
+        'Satellite mesh network telemetry with automatic failover channels',
+        'Ranger outpost dispatch queuing with priority response actions',
+        'Geolocated emergency signal triangulation and search-rescue grids'
       ]
     },
     {
-      id: 'booking',
-      name: 'Reservations Engine',
-      badge: 'LUXURY ALLOCATION SUITE',
-      title: 'Bespoke Booking Pipeline',
-      description: 'The definitive reservations ledger empowering camp staff and high-end boutique travel agencies to secure rooms, luxury cars, and charter flights.',
+      id: 'lodge-booking',
+      name: 'Lodge Booking',
+      badge: 'RESERVATIONS LEDGER SUITE',
+      title: 'Lodge Occupancy Allocator',
+      description: 'An executive occupancy ledger allowing reservations managers to instantly allocate luxury tents, match guest profiles with guides, and sync private airport pick-ups.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121047.png',
       details: [
-        'Dynamic, season-aware high-occupancy room allocation charts',
-        'Integrated flight sheets syncing directly with private charter pilots',
-        'Cryptographically signed travel agent workspaces and commissions ledger'
+        'Season-aware high-occupancy room grid locking with validation',
+        'Integrated charter flight logs detailing arrival times and pilots',
+        'Bespoke agent commission payout ledgers with secure API sync'
+      ]
+    },
+    {
+      id: 'flight-control',
+      name: 'Flight Control',
+      badge: 'AERIAL CHARTER ROUTING',
+      title: 'Serengeti Flight Control Desk',
+      description: 'Coordination panel mapping private charter flight paths, aircraft weight balances, runway wind vectors, and dynamic guest boarding schedules.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121100.png',
+      details: [
+        'Live airspace transponder tracking over remote national parks',
+        'Automated weight-balance calculation sheets for bush planes',
+        'Dynamic runway safety indicators tracking localized wind shear'
+      ]
+    },
+    {
+      id: 'sos-mesh',
+      name: 'SOS Mesh',
+      badge: 'OUTPOST COMMUNICATIONS',
+      title: 'SOS Mesh Signal Controller',
+      description: 'Low-latency RF mesh configuration tool providing ranger squads with un-jammable satellite audio channels and emergency beacons.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121108.png',
+      details: [
+        'Regional RF repeater mesh configuration loops with ping timers',
+        'Encrypted Ranger squad communication channel allocation',
+        'Priority SOS broadcast toggles overrides all passive data channels'
+      ]
+    },
+    {
+      id: 'guide-concession',
+      name: 'Guide Concession',
+      badge: 'WILDLIFE RECORDING & LOGS',
+      title: 'Guide Concession Intelligence',
+      description: 'Field guide migration ledger compiling game drive sightings, local wildlife encounters, conservation patrol logs, and ecological observation trends.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121117.png',
+      details: [
+        'Real-time animal migration mapping utilizing guide sightings',
+        'Anti-poaching patrol logs synced with regional conservation headquarters',
+        'Guest game drive checklists and custom feedback ratings'
+      ]
+    },
+    {
+      id: 'vessel-diagnostics',
+      name: 'Diagnostics',
+      badge: 'CRUISER HEALTH METADATA',
+      title: 'Vessel Stress & Sensor Diagnostics',
+      description: 'Mechanical diagnostic readouts monitoring tire pressure, shock absorber fatigue, radiator temps, and fuel qualities for deep-savannah cruiser excursions.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121124.png',
+      details: [
+        'Vibrational analysis metrics alerting to axle stress early',
+        'Tire heat monitoring logs mapping terrain stress coefficients',
+        'Radiator coolant heat cycles indicators preventing out-bush breakdowns'
+      ]
+    },
+    {
+      id: 'exec-analytics',
+      name: 'Exec Analytics',
+      badge: 'BUSINESS CONCESSION SAAS',
+      title: 'Executive Financial Analytics Grid',
+      description: 'High-level financial summaries showing average daily rates (ADR), revenue per available room (RevPAR), guide costs, and fleet maintenance overhead charts.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121132.png',
+      details: [
+        'Multi-currency dynamic pricing charts tracking seasonal demand',
+        'Consolidated concession fees calculations mapped against occupancy',
+        'Live operating cost projection dashboards with target targets'
+      ]
+    },
+    {
+      id: 'security-ledger',
+      name: 'Security Ledger',
+      badge: 'MILITARY AUDIT REGISTRY',
+      title: 'Security Cryptographic Audit Ledger',
+      description: 'Un-alterable write-once, read-many audit trail logging server entries, API executions, ranger dispatch overrides, and concession ledger access.',
+      imagePath: '/Gallery/Screenshot 2026-05-28 121157.png',
+      details: [
+        'SHA-256 block chain linkage validating operational compliance',
+        'Ranger override tracking logging dispatch authorization tokens',
+        'Strict HIPAA-compliant guest health file access audit log'
       ]
     }
   ];
+
+  // Sync index on active tab change
+  const currentPresetIndex = presets.findIndex(p => p.id === activeTab);
+
+  const openLightbox = () => {
+    if (activeTab === 'custom' && !uploadedImage) return;
+    
+    if (activeTab === 'custom') {
+      setLightboxIndex(-1);
+    } else {
+      setLightboxIndex(currentPresetIndex);
+    }
+    setIsLightboxOpen(true);
+  };
+
+  const handlePrevLightbox = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (lightboxIndex === -1) return;
+    setLightboxIndex(prev => (prev === 0 ? presets.length - 1 : prev - 1));
+  };
+
+  const handleNextLightbox = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (lightboxIndex === -1) return;
+    setLightboxIndex(prev => (prev === presets.length - 1 ? 0 : prev + 1));
+  };
+
+  // Keyboard navigation for Lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isLightboxOpen) return;
+      if (e.key === 'Escape') setIsLightboxOpen(false);
+      if (e.key === 'ArrowLeft') handlePrevLightbox();
+      if (e.key === 'ArrowRight') handleNextLightbox();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isLightboxOpen, lightboxIndex]);
 
   // Drag and drop event handlers
   const handleDrag = (e: React.DragEvent) => {
@@ -86,7 +214,7 @@ export const ScreenshotGallery = () => {
   const validateAndProcessFile = (file: File) => {
     setUploadError(null);
     
-    // Strict runtime validations
+    // Strict runtime validations (Rule 2)
     const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
     if (!validTypes.includes(file.type)) {
       setUploadError('Invalid format. Please upload PNG, JPG, JPEG, or WEBP images.');
@@ -105,7 +233,6 @@ export const ScreenshotGallery = () => {
       setIsSimulatingLoad(true);
       setUploadProgress(0);
       
-      // Simulate highly-polished loading progress ticker
       let currentProgress = 0;
       const progressInterval = setInterval(() => {
         currentProgress += Math.floor(Math.random() * 15) + 5;
@@ -115,14 +242,14 @@ export const ScreenshotGallery = () => {
         } else {
           setUploadProgress(currentProgress);
         }
-      }, 100);
+      }, 80);
     };
 
     reader.onloadend = () => {
       setTimeout(() => {
         setUploadedImage(reader.result as string);
         setIsSimulatingLoad(false);
-      }, 1000); // Aesthetic pause for processing representation
+      }, 600); 
     };
 
     reader.readAsDataURL(file);
@@ -166,78 +293,85 @@ export const ScreenshotGallery = () => {
             System Sandbox & Showcase
           </span>
           <h2 className="text-3xl md:text-5xl font-serif font-medium text-cream mb-4 max-w-3xl">
-            Experience the Administrative Console
+            Live Administrative Console
           </h2>
           <p className="text-sm md:text-base font-sans text-cream-muted font-light leading-relaxed max-w-3xl">
-            Toggle between our core real-time operational presets below, or **sandbox-test your own custom layout** by dropping a screenshot directly into our luxury device frame simulator.
+            Review screenshots of our core operating modules deployed on site, or **sandbox-test your own UI layouts** by dropping a screenshot directly into our widescreen terminal simulator.
           </p>
         </div>
 
         {/* Dynamic Display Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* LEFT COLUMN: Controls & Details */}
-          <div className="lg:col-span-5 flex flex-col space-y-8">
+          <div className="lg:col-span-5 flex flex-col space-y-6">
             
-            {/* Tab Selection Row */}
-            <div className="flex flex-wrap gap-2 p-1.5 bg-bg-surface border border-border-warm rounded-lg">
-              {presets.map((preset) => (
+            {/* Grid selector of presets */}
+            <div className="space-y-2">
+              <label className="block text-[10px] font-mono text-cream-muted uppercase tracking-wider mb-2">Select Operations Module View</label>
+              
+              <div className="grid grid-cols-3 gap-2 p-1.5 bg-bg-surface border border-border-warm rounded-xl">
+                {presets.map((preset) => (
+                  <button
+                    key={preset.id}
+                    onClick={() => {
+                      setActiveTab(preset.id);
+                      setUploadError(null);
+                    }}
+                    className={`px-2 py-3 rounded-[6px] text-[10px] font-mono tracking-wider uppercase transition-all duration-300 flex flex-col items-center justify-center text-center space-y-1 ${
+                      activeTab === preset.id
+                        ? 'bg-gold text-cream shadow-lg shadow-gold/10'
+                        : 'text-cream-muted hover:text-cream hover:bg-bg-lift/40'
+                    }`}
+                  >
+                    <span>{preset.name}</span>
+                  </button>
+                ))}
+                
+                {/* Sandbox selector */}
                 <button
-                  key={preset.id}
-                  onClick={() => {
-                    setActiveTab(preset.id);
-                    setUploadError(null);
-                  }}
-                  className={`px-4 py-2.5 rounded-[6px] text-xs font-mono tracking-wider uppercase transition-all duration-300 ${
-                    activeTab === preset.id
+                  onClick={() => setActiveTab('custom')}
+                  className={`px-2 py-3 rounded-[6px] text-[10px] font-mono tracking-wider uppercase transition-all duration-300 col-span-3 flex items-center justify-center space-x-1.5 ${
+                    activeTab === 'custom'
                       ? 'bg-gold text-cream shadow-lg shadow-gold/10'
-                      : 'text-cream-muted hover:text-cream hover:bg-bg-lift/40'
+                      : 'text-cream-muted hover:text-cream border border-dashed border-border-warm hover:border-gold/30 hover:bg-bg-lift/40'
                   }`}
                 >
-                  {preset.name.split(' ')[0]}
+                  <UploadCloud className="w-3.5 h-3.5" />
+                  <span>Sandbox Live Upload</span>
                 </button>
-              ))}
-              <button
-                onClick={() => setActiveTab('custom')}
-                className={`px-4 py-2.5 rounded-[6px] text-xs font-mono tracking-wider uppercase transition-all duration-300 ${
-                  activeTab === 'custom'
-                    ? 'bg-gold text-cream shadow-lg shadow-gold/10'
-                    : 'text-cream-muted hover:text-cream hover:bg-bg-lift/40'
-                }`}
-              >
-                Custom Sandbox
-              </button>
+              </div>
             </div>
 
             {/* Dynamic Content Panel */}
-            <div className="min-h-[260px] flex flex-col justify-between">
+            <div className="min-h-[220px] flex flex-col justify-between bg-bg-surface/30 border border-border-warm/40 p-6 rounded-xl">
               <AnimatePresence mode="wait">
                 {activeTab !== 'custom' && currentPreset ? (
                   <motion.div
                     key={currentPreset.id}
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.4 }}
-                    className="space-y-6"
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-4"
                   >
                     <div>
-                      <span className="text-[10px] tracking-[0.2em] font-mono text-gold font-semibold uppercase">
+                      <span className="text-[9px] tracking-[0.2em] font-mono text-gold font-semibold uppercase block">
                         {currentPreset.badge}
                       </span>
-                      <h3 className="text-2xl font-serif text-cream font-medium mt-1.5">
+                      <h3 className="text-xl font-serif text-cream font-medium mt-1">
                         {currentPreset.title}
                       </h3>
                     </div>
                     
-                    <p className="text-xs md:text-sm text-cream-muted font-light font-sans leading-relaxed">
+                    <p className="text-xs text-cream-muted font-light font-sans leading-relaxed">
                       {currentPreset.description}
                     </p>
 
-                    <ul className="space-y-3.5 pt-2">
+                    <ul className="space-y-2 pt-2 border-t border-border-warm/50">
                       {currentPreset.details.map((detail, index) => (
-                        <li key={index} className="flex items-start space-x-3 text-xs text-cream/90 font-sans font-light">
-                          <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                        <li key={index} className="flex items-start space-x-2.5 text-xs text-cream/90 font-sans font-light">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
                           <span>{detail}</span>
                         </li>
                       ))}
@@ -246,23 +380,23 @@ export const ScreenshotGallery = () => {
                 ) : (
                   <motion.div
                     key="custom-upload"
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.4 }}
-                    className="space-y-6"
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-4"
                   >
                     <div>
-                      <span className="text-[10px] tracking-[0.2em] font-mono text-gold font-semibold uppercase">
+                      <span className="text-[9px] tracking-[0.2em] font-mono text-gold font-semibold uppercase block">
                         LIVE SANDBOX SIMULATOR
                       </span>
-                      <h3 className="text-2xl font-serif text-cream font-medium mt-1.5">
-                        Upload Console Layout
+                      <h3 className="text-xl font-serif text-cream font-medium mt-1">
+                        Upload Custom Wireframe
                       </h3>
                     </div>
 
-                    <p className="text-xs md:text-sm text-cream-muted font-light font-sans leading-relaxed">
-                      Verify how your custom system designs, custom reservation flows, or telemetry analytics fit into the Axelo luxury framework. Files are rendered client-side instantly.
+                    <p className="text-xs text-cream-muted font-light font-sans leading-relaxed">
+                      Evaluate custom design prototypes, fleet logs, or custom calendars in context. Files are read client-side and projected in the device monitor frame.
                     </p>
 
                     {/* Interactive Drop / Upload Zone */}
@@ -273,9 +407,9 @@ export const ScreenshotGallery = () => {
                         onDragLeave={handleDrag}
                         onDrop={handleDrop}
                         onClick={triggerFileSelect}
-                        className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 ${
+                        className={`border border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 ${
                           dragActive 
-                            ? 'border-gold bg-gold/5 shadow-2xl shadow-gold/5 scale-[1.02]' 
+                            ? 'border-gold bg-gold/5 scale-[1.01]' 
                             : 'border-border-warm hover:border-gold/40 hover:bg-bg-surface bg-bg-surface/30'
                         }`}
                       >
@@ -286,24 +420,24 @@ export const ScreenshotGallery = () => {
                           accept="image/png, image/jpeg, image/jpg, image/webp"
                           onChange={handleFileInput}
                         />
-                        <div className="w-12 h-12 rounded-full bg-gold/10 border border-border-accent flex items-center justify-center mb-4 text-gold">
-                          <UploadCloud className="w-6 h-6 animate-pulse" />
+                        <div className="w-10 h-10 rounded-full bg-gold/10 border border-border-accent flex items-center justify-center mb-3 text-gold">
+                          <UploadCloud className="w-5 h-5 animate-pulse" />
                         </div>
                         <span className="text-xs font-mono text-cream font-medium tracking-wide block mb-1">
-                          Drag & Drop System Screenshot
+                          Drag & Drop Screenshot
                         </span>
-                        <span className="text-[10px] font-sans text-cream-muted font-light block mb-4">
-                          or click to browse local folders
+                        <span className="text-[10px] font-sans text-cream-muted font-light block mb-3">
+                          or click to browse local files
                         </span>
-                        <span className="text-[9px] font-mono text-cream-ghost border border-border-warm px-2 py-0.5 rounded uppercase">
+                        <span className="text-[8px] font-mono text-cream-ghost border border-border-warm px-2 py-0.5 rounded uppercase">
                           PNG, JPG, WEBP · MAX 5MB
                         </span>
                       </div>
                     ) : isSimulatingLoad ? (
-                      <div className="border border-border-warm rounded-xl p-8 flex flex-col items-center justify-center bg-bg-surface/30 min-h-[220px]">
-                        <RefreshCw className="w-8 h-8 text-gold animate-spin mb-4" />
+                      <div className="border border-border-warm rounded-lg p-6 flex flex-col items-center justify-center bg-bg-surface/30 min-h-[160px]">
+                        <RefreshCw className="w-6 h-6 text-gold animate-spin mb-3" />
                         <span className="text-xs font-mono text-cream font-medium mb-2 uppercase tracking-widest">
-                          Cryptographic Parsing
+                          Syncing Canvas Frame
                         </span>
                         <div className="w-full max-w-xs bg-border-warm h-1 rounded-full overflow-hidden relative">
                           <motion.div 
@@ -313,31 +447,31 @@ export const ScreenshotGallery = () => {
                             transition={{ ease: 'easeInOut' }}
                           />
                         </div>
-                        <span className="text-[10px] font-mono text-cream-ghost mt-2">
-                          {uploadProgress}% INDEXED
+                        <span className="text-[9px] font-mono text-cream-ghost mt-2">
+                          {uploadProgress}% PROCESSED
                         </span>
                       </div>
                     ) : (
-                      <div className="border border-gold/30 rounded-xl p-6 bg-bg-surface/50 border border-border-warm flex flex-col space-y-4">
+                      <div className="border border-gold/20 rounded-lg p-4 bg-bg-surface/40 flex flex-col space-y-3">
                         <div className="flex items-center justify-between border-b border-border-warm pb-3">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 rounded-lg bg-green/10 border border-green/30 flex items-center justify-center text-green">
-                              <FileImage className="w-4 h-4" />
+                          <div className="flex items-center space-x-2.5">
+                            <div className="w-7 h-7 rounded bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-500">
+                              <FileImage className="w-4.5 h-4.5" />
                             </div>
                             <div>
-                              <span className="text-xs font-mono text-cream font-medium block">Screenshot Loaded</span>
-                              <span className="text-[10px] font-sans text-green font-semibold">Parity Synced Client-Side</span>
+                              <span className="text-xs font-mono text-cream font-medium block">Custom Screenshot</span>
+                              <span className="text-[9px] font-sans text-green-500">Loaded Client-Side</span>
                             </div>
                           </div>
                           <button
                             onClick={clearUploadedImage}
-                            className="text-[10px] font-mono text-danger font-bold hover:bg-danger/15 border border-danger/30 rounded px-2.5 py-1 uppercase transition-all duration-300"
+                            className="text-[9px] font-mono text-red-500 border border-red-500/20 hover:bg-red-500/10 rounded px-2 py-1 uppercase transition-all duration-300"
                           >
-                            Reset Custom View
+                            Clear View
                           </button>
                         </div>
-                        <div className="flex items-center space-x-2 text-[10px] font-mono text-cream-muted">
-                          <ShieldCheck className="w-4 h-4 text-gold shrink-0" />
+                        <div className="flex items-center space-x-2 text-[9px] font-mono text-cream-muted">
+                          <ShieldCheck className="w-3.5 h-3.5 text-gold shrink-0" />
                           <span>Local safety checks validated without server storage.</span>
                         </div>
                       </div>
@@ -345,8 +479,8 @@ export const ScreenshotGallery = () => {
 
                     {/* Runtime error alerts */}
                     {uploadError && (
-                      <div className="border border-danger/30 bg-danger/10 text-danger rounded-lg p-3 flex items-start space-x-2.5 text-xs font-sans">
-                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                      <div className="border border-danger/30 bg-danger/10 text-danger rounded-lg p-3 flex items-start space-x-2 text-xs font-sans">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
                         <span>{uploadError}</span>
                       </div>
                     )}
@@ -361,178 +495,66 @@ export const ScreenshotGallery = () => {
           <div className="lg:col-span-7 w-full flex justify-center">
             
             {/* Widescreen Monitor Frame Wrapper */}
-            <div className="relative w-full max-w-2xl bg-bg-surface/80 rounded-2xl border border-border-warm shadow-2xl p-3 md:p-4 overflow-hidden select-none">
+            <div 
+              onClick={openLightbox}
+              className={`
+                relative w-full max-w-2xl bg-bg-surface/80 rounded-2xl border border-border-warm shadow-2xl p-3 md:p-4 overflow-hidden select-none group
+                ${(activeTab !== 'custom' || uploadedImage) ? 'cursor-zoom-in' : ''}
+              `}
+            >
               
               {/* Top Status Bar Controls */}
-              <div className="flex items-center justify-between border-b border-border-warm/60 pb-3.5 mb-3.5 px-1 md:px-2">
+              <div className="flex items-center justify-between border-b border-border-warm/60 pb-3 mb-3 px-1">
                 <div className="flex items-center space-x-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-danger" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
                   <div className="w-2.5 h-2.5 rounded-full bg-gold" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-green" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
                   <span className="text-[9px] font-mono text-cream-ghost tracking-widest pl-2">CONSOLE LINK: ACT-1402</span>
                 </div>
                 <div className="flex items-center space-x-4 text-[9px] font-mono text-cream-ghost">
                   <span className="hidden sm:inline">SAT-GRID: 99.8% UPTIME</span>
-                  <span className="bg-border-warm px-1.5 py-0.5 rounded text-gold">VIP ENCRYPT: SH-256</span>
+                  <span className="bg-border-warm px-1.5 py-0.5 rounded text-gold">VIP LOCK</span>
                 </div>
               </div>
 
-              {/* Dynamic Telemetry Display Pane */}
+              {/* Display Pane */}
               <div className="relative w-full aspect-[16/10] bg-bg-base/90 rounded-lg border border-border-warm/60 overflow-hidden flex items-center justify-center">
                 
-                {/* Glossy Reflective Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-cream/3 to-transparent pointer-events-none z-30" />
-                
-                {/* Laser Scanning Telemetry Line */}
-                <div className="absolute left-0 w-full h-[1.5px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-40 z-20 animate-[scan-line_4s_ease-in-out_infinite]" />
+                {/* Glare and Scanner lines */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-cream/2 to-transparent pointer-events-none z-30" />
+                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent opacity-30 z-20 animate-[scan-line_4s_ease-in-out_infinite]" />
+
+                {/* Fullscreen indicator on hover */}
+                {(activeTab !== 'custom' || uploadedImage) && (
+                  <div className="absolute inset-0 bg-bg-base/40 opacity-0 group-hover:opacity-100 flex items-center justify-center z-20 transition-opacity duration-300 pointer-events-none">
+                    <div className="bg-gold/90 text-bg-base font-mono text-[9px] font-bold px-3 py-1.5 rounded-lg flex items-center space-x-1.5 shadow-lg shadow-gold/20">
+                      <Maximize2 className="w-3.5 h-3.5" />
+                      <span>Maximize Console</span>
+                    </div>
+                  </div>
+                )}
 
                 <AnimatePresence mode="wait">
-                  {/* Preset 1: SOS Outpost Mesh */}
-                  {activeTab === 'sos' && (
+                  
+                  {/* Preset Screens (renders real images) */}
+                  {activeTab !== 'custom' && currentPreset && (
                     <motion.div
-                      key="sos-screen"
+                      key={currentPreset.id}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="absolute inset-0 w-full h-full flex flex-col justify-between p-5 md:p-6"
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 w-full h-full"
                     >
-                      <div className="flex items-center justify-between border-b border-border-warm/30 pb-3 mb-2">
-                        <div className="flex items-center space-x-2">
-                          <Radio className="w-4 h-4 text-danger animate-pulse" />
-                          <span className="text-[10px] font-mono font-bold text-danger uppercase tracking-wider">ACTIVE EMERGENCY RESPONSE</span>
-                        </div>
-                        <span className="text-[9px] font-mono text-cream-ghost">SECTOR-4 SERENGETI GRID</span>
-                      </div>
-                      
-                      {/* Interactive Radar Visual */}
-                      <div className="flex-grow relative flex flex-col justify-center items-center overflow-hidden bg-bg-surface/30 rounded border border-border-warm/20 p-4">
-                        <div className="absolute inset-0 bg-[radial-gradient(#2c2418_1.2px,transparent_1.2px)] [background-size:20px_20px] opacity-40" />
-                        <div className="w-24 h-24 rounded-full border border-danger/20 flex items-center justify-center animate-[ping_3s_infinite]">
-                          <div className="w-12 h-12 rounded-full border border-danger/40 flex items-center justify-center">
-                            <Radio className="w-5 h-5 text-danger" />
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold text-cream bg-danger/15 border border-danger/30 rounded px-2.5 py-1 text-center max-w-xs mt-4">
-                          Ranger Outpost #03 Dispatch Approved
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 mt-4 text-[9px] font-mono">
-                        <div className="bg-bg-surface p-2.5 border border-border-warm rounded">
-                          <div className="text-cream-ghost mb-0.5">ESTIMATED LATENCY</div>
-                          <div className="text-danger font-bold">0.02 SECONDS (OUTDOOR)</div>
-                        </div>
-                        <div className="bg-bg-surface p-2.5 border border-border-warm rounded">
-                          <div className="text-cream-ghost mb-0.5">SQUAD telemetry</div>
-                          <div className="text-cream font-bold">4 DISPATCHED · 2 REMOTE BACKUP</div>
-                        </div>
-                      </div>
+                      <img
+                        src={currentPreset.imagePath}
+                        alt={currentPreset.title}
+                        className="w-full h-full object-cover object-top filter contrast-[1.02] saturate-[1.01]"
+                      />
                     </motion.div>
                   )}
 
-                  {/* Preset 2: Operations Watchdog */}
-                  {activeTab === 'watchdog' && (
-                    <motion.div
-                      key="watchdog-screen"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute inset-0 w-full h-full flex flex-col justify-between p-5 md:p-6"
-                    >
-                      <div className="flex items-center justify-between border-b border-border-warm/30 pb-3 mb-2">
-                        <div className="flex items-center space-x-2">
-                          <Cpu className="w-4 h-4 text-gold" />
-                          <span className="text-[10px] font-mono font-bold text-gold uppercase tracking-wider">VEHICLE TELEMETRY CENTRAL</span>
-                        </div>
-                        <span className="text-[9px] font-mono text-cream-ghost">14 ENROUTE CRUISERS SYNCHRONIZED</span>
-                      </div>
-
-                      {/* Map Path Layout */}
-                      <div className="flex-grow relative flex flex-col justify-center bg-bg-surface/30 rounded border border-border-warm/20 p-4">
-                        <div className="absolute inset-0 bg-[radial-gradient(#2c2418_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-20" />
-                        <svg className="w-full h-24 stroke-gold/25 stroke-[1.5] fill-none">
-                          <path d="M20,70 L140,20 C180,60 210,10 280,80 L380,20" strokeDasharray="3 3" />
-                          <circle cx="210" cy="30" r="5.5" fill="#E8A84E" className="animate-pulse" />
-                          <circle cx="210" cy="30" r="3" fill="#E8A84E" />
-                          <text x="225" y="34" fill="#F0E8D8" fontSize="8" fontFamily="monospace" fontWeight="bold">CRUISER #09</text>
-                        </svg>
-                        <span className="text-[9px] font-mono text-cream-muted text-center mt-3 uppercase">
-                          Compliance rating: 97.4% · Speed geofence tracking active
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 mt-4 text-[9px] font-mono">
-                        <div className="bg-bg-surface p-2.5 border border-border-warm rounded">
-                          <div className="text-cream-ghost mb-0.5">MECHANICAL WARNINGS</div>
-                          <div className="text-gold font-bold">1 COMPLIANCE EXCEEDED (CRUISER #04)</div>
-                        </div>
-                        <div className="bg-bg-surface p-2.5 border border-border-warm rounded">
-                          <div className="text-cream-ghost mb-0.5">OUTPOST GEOFENCE</div>
-                          <div className="text-green font-bold">13 VEHICLES COMPLIANT</div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Preset 3: Reservations Engine */}
-                  {activeTab === 'booking' && (
-                    <motion.div
-                      key="booking-screen"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute inset-0 w-full h-full flex flex-col justify-between p-5 md:p-6"
-                    >
-                      <div className="flex items-center justify-between border-b border-border-warm/30 pb-3 mb-2">
-                        <div className="flex items-center space-x-2">
-                          <Terminal className="w-4 h-4 text-green" />
-                          <span className="text-[10px] font-mono font-bold text-green uppercase tracking-wider">RESERVATION INVENTORY MONITOR</span>
-                        </div>
-                        <span className="text-[9px] font-mono text-green font-bold">98.2% CAPACITY HELD</span>
-                      </div>
-
-                      <div className="flex-grow flex flex-col justify-between bg-bg-surface/30 rounded border border-border-warm/20 p-4 font-mono text-[9px] text-cream-muted leading-relaxed">
-                        <div className="flex items-center justify-between border-b border-border-warm/20 pb-2 mb-2 text-cream font-semibold">
-                          <span>SUITE / LODGE IDENTIFIER</span>
-                          <span>PERIOD SYNC</span>
-                          <span>STATUS</span>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span>#01 KIBO SUITE (AMBOSELI)</span>
-                            <span>JUL 22 — JUL 28</span>
-                            <span className="text-green font-bold bg-green/10 px-1.5 rounded uppercase">CONFIRMED</span>
-                          </div>
-                          <div className="flex justify-between border-t border-border-warm/10 pt-1.5">
-                            <span>#04 MARA TENT (MASAI MARA)</span>
-                            <span>AUG 04 — AUG 12</span>
-                            <span className="text-green font-bold bg-green/10 px-1.5 rounded uppercase">CONFIRMED</span>
-                          </div>
-                          <div className="flex justify-between border-t border-border-warm/10 pt-1.5">
-                            <span>#07 SERENGETI VISTA (SERENGETI)</span>
-                            <span>SEP 10 — SEP 15</span>
-                            <span className="text-gold font-bold bg-gold/15 px-1.5 rounded uppercase">HOLD LOCK</span>
-                          </div>
-                        </div>
-                        <div className="border-t border-border-warm/20 pt-2 text-[8px] text-cream-ghost text-center uppercase">
-                          Dynamic commission scaling rules synced for high tier boutiques (+15%)
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 mt-4 text-[9px] font-mono">
-                        <div className="bg-bg-surface p-2.5 border border-border-warm rounded">
-                          <div className="text-cream-ghost mb-0.5">VIP LODGE COUNT</div>
-                          <div className="text-cream font-bold">14 ACTIVE SUITES</div>
-                        </div>
-                        <div className="bg-bg-surface p-2.5 border border-border-warm rounded">
-                          <div className="text-cream-ghost mb-0.5">CHARTER FLIGHTS CO-SYNC</div>
-                          <div className="text-green font-bold">3 CO-FLIGHTS ACTIVE</div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Preset 4: Custom Upload Simulation */}
+                  {/* Custom upload view */}
                   {activeTab === 'custom' && (
                     <motion.div
                       key="custom-screen"
@@ -545,44 +567,41 @@ export const ScreenshotGallery = () => {
                         <div className="w-full h-full relative">
                           <img
                             src={uploadedImage}
-                            alt="Custom System Screenshot"
-                            className="w-full h-full object-cover object-top filter contrast-[1.03] saturate-[1.02]"
+                            alt="Custom Workspace"
+                            className="w-full h-full object-cover object-top filter contrast-[1.03]"
                           />
-                          {/* Live Scan indicator absolute overlay */}
-                          <div className="absolute top-3 left-3 bg-gold/90 text-bg-base font-mono text-[8px] font-bold px-2 py-0.5 rounded tracking-widest uppercase shadow-md animate-pulse">
-                            LIVE TELEMETRY PROJECTION
+                          <div className="absolute top-3 left-3 bg-gold/95 text-bg-base font-mono text-[8px] font-bold px-2 py-0.5 rounded tracking-widest uppercase shadow">
+                            TELEMETRY LINK SYNCHRONIZED
                           </div>
                         </div>
                       ) : (
-                        <div className="w-full h-full flex flex-col justify-between p-5 md:p-6 text-cream-ghost font-mono">
+                        <div className="w-full h-full flex flex-col justify-between p-5 text-cream-ghost font-mono">
                           <div className="flex items-center justify-between border-b border-border-warm/30 pb-3 mb-2">
                             <div className="flex items-center space-x-2">
                               <Terminal className="w-4 h-4 text-cream-ghost" />
-                              <span className="text-[10px] font-bold uppercase tracking-wider">LIVE CUSTOM SIMULATOR V1</span>
+                              <span className="text-[10px] font-bold uppercase tracking-wider">SANDBOX CANVAS</span>
                             </div>
-                            <span className="text-[9px] text-danger animate-pulse font-bold">SANDBOX OFFLINE</span>
+                            <span className="text-[9px] text-red-500 animate-pulse font-bold">STANDBY READY</span>
                           </div>
 
-                          {/* Terminal Wireframe Falling Blocks Visual */}
-                          <div className="flex-grow flex flex-col items-center justify-center text-center p-4 border border-dashed border-border-warm rounded bg-bg-surface/10 relative">
-                            <div className="absolute inset-0 bg-[radial-gradient(#2c2418_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-10" />
-                            <Terminal className="w-12 h-12 text-cream-ghost mb-4 opacity-30 animate-pulse" />
+                          <div className="flex-grow flex flex-col items-center justify-center text-center p-4 border border-dashed border-border-warm/50 rounded bg-bg-surface/10">
+                            <Terminal className="w-10 h-10 text-cream-ghost mb-3 opacity-25 animate-pulse" />
                             <h4 className="text-xs text-cream-muted font-bold tracking-widest uppercase mb-1">
-                              Telemetry Vault Standby
+                              Canvas Vault Offline
                             </h4>
                             <p className="text-[9px] text-cream-ghost max-w-xs font-sans leading-relaxed">
-                              Upload a screenshot of your administrator systems, scheduling desks, or analytical workspaces on the left. The live terminal grid will automatically projection-map your frame here.
+                              Upload a screenshot of your management systems on the left to project it directly into this widescreen chassis.
                             </p>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3 mt-4 text-[9px]">
-                            <div className="bg-bg-surface/40 p-2.5 border border-border-warm/60 rounded">
-                              <div className="text-cream-ghost mb-0.5">VAULT PARITY CODE</div>
-                              <div className="text-cream-ghost font-bold">SEC-0000 / NOT VALIDATED</div>
+                          <div className="grid grid-cols-2 gap-2 mt-3 text-[8px]">
+                            <div className="bg-bg-surface/40 p-2 border border-border-warm/60 rounded">
+                              <div className="text-cream-ghost mb-0.5">PARITY CODE</div>
+                              <div className="text-cream-ghost font-bold">NOT READY</div>
                             </div>
-                            <div className="bg-bg-surface/40 p-2.5 border border-border-warm/60 rounded">
-                              <div className="text-cream-ghost mb-0.5">DECRYPT CHANNEL</div>
-                              <div className="text-cream-ghost font-bold">0 SENSORS MOUNTED</div>
+                            <div className="bg-bg-surface/40 p-2 border border-border-warm/60 rounded">
+                              <div className="text-cream-ghost mb-0.5">SECURE SIGNATURE</div>
+                              <div className="text-cream-ghost font-bold">PENDING PAYLOAD</div>
                             </div>
                           </div>
                         </div>
@@ -599,6 +618,101 @@ export const ScreenshotGallery = () => {
         </div>
 
       </div>
+
+      {/* FULLSCREEN LIGHTBOX PORTAL VIEW */}
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4">
+            
+            {/* Backdrop glass */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsLightboxOpen(false)}
+              className="absolute inset-0 bg-[#070504]/96 backdrop-blur-xl"
+            />
+
+            {/* Lightbox Wrapper */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.4 }}
+              className="relative w-full max-w-5xl z-10 flex flex-col justify-center items-center"
+            >
+              
+              {/* Close Button top-right */}
+              <button
+                onClick={() => setIsLightboxOpen(false)}
+                className="absolute -top-12 right-2 md:right-0 w-9 h-9 rounded-full border border-border-warm bg-bg-surface hover:border-gold/50 flex items-center justify-center text-cream-muted hover:text-cream transition-all duration-300"
+                aria-label="Close fullscreen view"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Left Navigator (only if presets) */}
+              {lightboxIndex !== -1 && (
+                <button
+                  onClick={handlePrevLightbox}
+                  className="absolute left-2 md:-left-16 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border-warm bg-bg-surface/80 hover:border-gold/50 flex items-center justify-center text-cream hover:text-gold transition-all duration-300 shadow-lg z-20"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+
+              {/* Widescreen image display */}
+              <div className="relative border border-border-warm bg-bg-surface p-1 md:p-2 rounded-xl shadow-2xl overflow-hidden aspect-[16/10] w-full">
+                <img
+                  src={lightboxIndex === -1 ? (uploadedImage || '') : presets[lightboxIndex].imagePath}
+                  alt="High Resolution Console view"
+                  className="w-full h-full object-cover object-top rounded-lg"
+                />
+              </div>
+
+              {/* Right Navigator (only if presets) */}
+              {lightboxIndex !== -1 && (
+                <button
+                  onClick={handleNextLightbox}
+                  className="absolute right-2 md:-right-16 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border-warm bg-bg-surface/80 hover:border-gold/50 flex items-center justify-center text-cream hover:text-gold transition-all duration-300 shadow-lg z-20"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              )}
+
+              {/* Bottom Details Tag */}
+              {lightboxIndex !== -1 && (
+                <div className="mt-4 bg-bg-surface border border-border-warm px-5 py-3 rounded-lg text-center max-w-lg shadow-lg">
+                  <span className="text-[8px] font-mono text-gold font-bold tracking-[0.2em] uppercase block mb-1">
+                    {presets[lightboxIndex].badge}
+                  </span>
+                  <span className="text-sm font-serif text-cream font-medium">
+                    {presets[lightboxIndex].title}
+                  </span>
+                  <span className="text-[10px] font-mono text-cream-ghost block mt-2.5">
+                    VIEWING PAGE {lightboxIndex + 1} OF {presets.length} · CLICK ARROWS TO WALKTHROUGH
+                  </span>
+                </div>
+              )}
+
+              {lightboxIndex === -1 && (
+                <div className="mt-4 bg-bg-surface border border-gold/20 px-5 py-3 rounded-lg text-center max-w-sm shadow-lg">
+                  <span className="text-[8px] font-mono text-gold font-bold tracking-[0.2em] uppercase block mb-1">
+                    CUSTOM PROJECTION
+                  </span>
+                  <span className="text-sm font-serif text-cream font-medium">
+                    User Sandbox Upload Layout
+                  </span>
+                </div>
+              )}
+
+            </motion.div>
+
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

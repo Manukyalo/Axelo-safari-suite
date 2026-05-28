@@ -5,6 +5,8 @@ import { LenisProvider } from '@/lib/lenis';
 import { GrainOverlay } from '@/components/GrainOverlay';
 import { CustomCursor } from '@/components/CustomCursor';
 import { Preloader } from '@/components/Preloader';
+import { BookingProvider } from '@/lib/context/BookingContext';
+import { BookingModal } from '@/components/BookingModal';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -51,17 +53,21 @@ export default function RootLayout({
         className={`${cormorant.variable} ${dmSans.variable} font-sans bg-bg-base text-cream antialiased selection:bg-gold selection:text-bg-base`}
       >
         <LenisProvider>
-          {/* Global Cinematic Assets & Dynamic Systems */}
-          <GrainOverlay />
-          <CustomCursor />
-          <Preloader />
-          
-          {/* Main Website Wrapper */}
-          <main id="app-root" className="relative min-h-screen">
-            {children}
-          </main>
+          <BookingProvider>
+            {/* Global Cinematic Assets & Dynamic Systems */}
+            <GrainOverlay />
+            <CustomCursor />
+            <Preloader />
+            <BookingModal />
+            
+            {/* Main Website Wrapper */}
+            <main id="app-root" className="relative min-h-screen">
+              {children}
+            </main>
+          </BookingProvider>
         </LenisProvider>
       </body>
     </html>
   );
 }
+

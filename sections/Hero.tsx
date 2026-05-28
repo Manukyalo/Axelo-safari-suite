@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import gsap from '../lib/gsap';
 import { SplitHeading } from '../components/SplitHeading';
 import { MagneticButton } from '../components/MagneticButton';
+import { useBooking } from '../lib/context/BookingContext';
+
 
 const StatCounter: React.FC<{ value: number; decimals?: number }> = ({ value, decimals = 0 }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -41,6 +43,7 @@ const StatCounter: React.FC<{ value: number; decimals?: number }> = ({ value, de
 
 export const Hero = () => {
   const [isStarted, setIsStarted] = useState(false);
+  const { openBooking } = useBooking();
   const bgSilhouetteRef = useRef<HTMLDivElement>(null);
   const statsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -173,7 +176,10 @@ export const Hero = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.95 }}
             >
-              <MagneticButton className="bg-transparent hover:bg-cream/5 text-cream font-mono text-xs tracking-wider uppercase px-8 py-4 rounded-[8px] border border-border-warm transition-all duration-300 select-none">
+              <MagneticButton 
+                onClick={openBooking}
+                className="bg-transparent hover:bg-cream/5 text-cream font-mono text-xs tracking-wider uppercase px-8 py-4 rounded-[8px] border border-border-warm transition-all duration-300 select-none"
+              >
                 Book Private Demo
               </MagneticButton>
             </motion.div>
