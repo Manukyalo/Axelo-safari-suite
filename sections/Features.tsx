@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import gsap from '../lib/gsap';
 import { SplitHeading } from '../components/SplitHeading';
+import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion';
 import { 
   ShieldAlert, 
   Eye, 
@@ -25,14 +26,18 @@ interface FeatureItem {
 
 const FeatureCard: React.FC<{ card: FeatureItem; index: number }> = ({ card, index }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const shineRef = useRef<HTMLDivElement>(null);
+
+  // Framer Motion values for smooth physical springs
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(useMotionValue(0), { damping: 30, stiffness: 200, mass: 0.5 });
+  const rotateY = useSpring(useMotionValue(0), { damping: 30, stiffness: 200, mass: 0.5 });
 
   useEffect(() => {
     const cardEl = cardRef.current;
     if (!cardEl) return;
 
-    // A) CARD PARALLAX ON SCROLL
-    // Odd indexes get slower parallax, even indexes get faster parallax
     const isOdd = index % 2 !== 0;
     const yVal = isOdd ? 15 : 30;
 
@@ -56,64 +61,49 @@ const FeatureCard: React.FC<{ card: FeatureItem; index: number }> = ({ card, ind
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const cardEl = cardRef.current;
-    const shineEl = shineRef.current;
     if (!cardEl) return;
 
     const rect = cardEl.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Update follow shine coordinates
-    if (shineEl) {
-      shineEl.style.setProperty('--x', `${x}px`);
-      shineEl.style.setProperty('--y', `${y}px`);
-    }
+    mouseX.set(x);
+    mouseY.set(y);
 
-    // 3D Tilt calculation: rotate max 6 degrees
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateY = ((x - centerX) / rect.width) * 8; // rotateX on Y axis
-    const rotateX = -((y - centerY) / rect.height) * 8; // rotateY on X axis
-
-    gsap.to(cardEl, {
-      rotateX: rotateX,
-      rotateY: rotateY,
-      transformPerspective: 800,
-      duration: 0.25,
-      ease: 'power1.out',
-    });
+    
+    // Calculate rotation limits
+    rotateX.set(-((y - centerY) / rect.height) * 12);
+    rotateY.set(((x - centerX) / rect.width) * 12);
   };
 
   const handleMouseLeave = () => {
-    const cardEl = cardRef.current;
-    if (!cardEl) return;
-
-    // Reset with luxury spring ease
-    gsap.to(cardEl, {
-      rotateX: 0,
-      rotateY: 0,
-      duration: 0.45,
-      ease: 'power2.out',
-    });
+    rotateX.set(0);
+    rotateY.set(0);
   };
 
+  const backgroundGlow = useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, ${card.accentColor}1A, transparent 80%)`;
+
   return (
-    <div
+    <motion.div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="feature-card relative flex flex-col justify-between p-8 rounded-xl bg-bg-surface border border-border-warm hover:border-gold/30 hover:bg-bg-lift transition-colors duration-350 ease-out h-[360px] group shadow-lg overflow-hidden will-change-transform"
       style={{
-        transition: 'border-color 0.35s cubic-bezier(0.25,0.46,0.45,0.94), background-color 0.35s cubic-bezier(0.25,0.46,0.45,0.94)',
+        rotateX,
+        rotateY,
+        transformPerspective: 1000,
       }}
+      className="feature-card relative flex flex-col justify-between p-8 rounded-xl bg-bg-surface border border-border-warm hover:border-gold/30 hover:bg-bg-lift transition-colors duration-350 ease-out h-[360px] group shadow-lg overflow-hidden will-change-transform"
     >
-      {/* Mouse Follow Spot Shine */}
-      <div 
-        ref={shineRef} 
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-350 pointer-events-none glow-card-shine"
+      {/* Dynamic Glow using Framer Motion */}
+      <motion.div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-350 pointer-events-none z-0"
+        style={{ background: backgroundGlow }}
       />
 
-      <div>
+      <div className="relative z-10">
         {/* Header (Icon + Eyebrow) */}
         <div className="flex items-center space-x-4 mb-5">
           <div 
@@ -153,7 +143,7 @@ const FeatureCard: React.FC<{ card: FeatureItem; index: number }> = ({ card, ind
           </li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   );
 };
 

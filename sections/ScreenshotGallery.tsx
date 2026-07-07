@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import gsap from '../lib/gsap';
 import { 
   UploadCloud, 
   FileImage, 
@@ -40,6 +41,49 @@ export const ScreenshotGallery = () => {
   const [lightboxIndex, setLightboxIndex] = useState<number>(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const monitorRef = useRef<HTMLDivElement>(null);
+
+  // Framer Motion 3D Tilt values
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  
+  const springConfig = { damping: 30, stiffness: 150, mass: 1 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  const rotateX = useTransform(smoothY, [0, 1], [8, -8]);
+  const rotateY = useTransform(smoothX, [0, 1], [-8, 8]);
+
+  // GSAP Parallax on scroll
+  useEffect(() => {
+    const monitorEl = monitorRef.current;
+    if (!monitorEl) return;
+
+    import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+      gsap.fromTo(
+        monitorEl,
+        { y: 60 },
+        {
+          y: -60,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          }
+        }
+      );
+    });
+  }, []);
+
+  const handleGlobalMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    mouseX.set(clientX / innerWidth);
+    mouseY.set(clientY / innerHeight);
+  };
 
   const presets: ScreenshotPreset[] = [
     {
@@ -233,8 +277,13 @@ export const ScreenshotGallery = () => {
   const currentPreset = presets.find(p => p.id === activeTab);
 
   return (
-    <section id="screenshot-sandbox" className="py-24 md:py-32 px-6 md:px-12 bg-bg-base relative border-t border-border-warm z-20">
-      <div className="max-w-6xl mx-auto">
+    <section 
+      ref={sectionRef}
+      onMouseMove={handleGlobalMouseMove}
+      id="screenshot-sandbox" 
+      className="py-24 md:py-32 px-6 md:px-12 bg-bg-base relative border-t border-border-warm z-20 overflow-hidden perspective-[2000px]"
+    >
+      <div className="max-w-6xl mx-auto relative z-10">
         
         {/* Section Header */}
         <div className="mb-16 md:mb-20">
@@ -441,13 +490,15 @@ export const ScreenshotGallery = () => {
           </div>
 
           {/* RIGHT COLUMN: Glassmorphic Device Simulator */}
-          <div className="lg:col-span-7 w-full flex justify-center">
+          <div className="lg:col-span-7 w-full flex justify-center" style={{ perspective: 1200 }}>
             
             {/* Widescreen Monitor Frame Wrapper */}
-            <div 
+            <motion.div 
+              ref={monitorRef}
               onClick={openLightbox}
+              style={{ rotateX, rotateY }}
               className={`
-                relative w-full max-w-2xl bg-bg-surface/80 rounded-2xl border border-border-warm shadow-2xl p-3 md:p-4 overflow-hidden select-none group
+                relative w-full max-w-2xl bg-bg-surface/80 rounded-2xl border border-border-warm shadow-[0_30px_60px_-15px_rgba(196,136,44,0.1)] p-3 md:p-4 overflow-hidden select-none group transform-gpu
                 ${(activeTab !== 'custom' || uploadedImage) ? 'cursor-zoom-in' : ''}
               `}
             >
@@ -560,7 +611,7 @@ export const ScreenshotGallery = () => {
                 </AnimatePresence>
               </div>
 
-            </div>
+            </motion.div>
 
           </div>
 

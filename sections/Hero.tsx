@@ -6,7 +6,9 @@ import gsap from '../lib/gsap';
 import { SplitHeading } from '../components/SplitHeading';
 import { MagneticButton } from '../components/MagneticButton';
 import { useBooking } from '../lib/context/BookingContext';
+import dynamic from 'next/dynamic';
 
+const HeroScene3D = dynamic(() => import('../components/3d/HeroScene3D'), { ssr: false });
 
 export const Hero = () => {
   const [isStarted, setIsStarted] = useState(false);
@@ -49,6 +51,8 @@ export const Hero = () => {
       id="hero-section"
       className="relative min-h-screen w-full flex flex-col justify-between pt-32 pb-24 md:pb-36 px-6 md:px-12 bg-bg-base overflow-hidden"
     >
+      <HeroScene3D />
+      
       {/* Absolute Wildlife Silhouette Background with Parallax */}
       <div
         ref={bgSilhouetteRef}
